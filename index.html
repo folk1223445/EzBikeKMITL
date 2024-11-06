@@ -3,90 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EzBike KMITL</title>
+    <title>EzBike Kmitl</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-            margin: 0;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        .form-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 320px;
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        button {
-            background-color: #ff6600;
-            color: white;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #e65c00;
-        }
-
-        .response {
-            margin-top: 20px;
-            font-size: 16px;
-            color: green;
-        }
-
-        .response.error {
-            color: red;
-        }
-
-        .waiting-page {
-            text-align: center;
-            display: none;
-        }
-
-        .waiting-page h1 {
-            font-size: 24px;
-            color: #333;
-        }
-
-        .emoji {
-            font-size: 80px;
-        }
+        /* Style your form and page here */
     </style>
 </head>
 <body>
-
-    <div class="form-container" id="form-container">
-        <h1>EzBike KMITL</h1>
-        
+    <div>
+        <h1>EzBike Kmitl</h1>
         <form id="testForm">
             <label for="phoneNumber">Phone Number (10 digits):</label>
             <input type="text" id="phoneNumber" name="phoneNumber" maxlength="10" required><br><br>
@@ -99,13 +23,7 @@
 
             <button type="button" onclick="sendData()">Enter</button>
         </form>
-
         <div id="response" class="response"></div>
-    </div>
-
-    <div class="waiting-page" id="waitingPage">
-        <h1>Wait for 5 minutes</h1>
-        <div class="emoji">😊</div>
     </div>
 
     <script>
@@ -119,11 +37,7 @@
                 return;
             }
 
-            const formData = {
-                phoneNumber: phoneNumber,
-                pickup: pickup,
-                dropoff: dropoff
-            };
+            const formData = { phoneNumber, pickup, dropoff };
 
             fetch('http://172.20.10.2:3000/submit', {
                 method: 'POST',
@@ -134,8 +48,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("form-container").style.display = "none"; // Hide form
-                document.getElementById("waitingPage").style.display = "block"; // Show waiting page
+                const responseDiv = document.getElementById("response");
+                responseDiv.textContent = data.message;
+                responseDiv.classList.remove('error');
+                responseDiv.classList.add('success');
+                document.getElementById("testForm").reset();
             })
             .catch(error => {
                 const responseDiv = document.getElementById("response");
@@ -145,6 +62,5 @@
             });
         }
     </script>
-
 </body>
 </html>
